@@ -1,0 +1,31 @@
+{
+    "version": 3,
+    "name": "API Gateway",
+    "timeout": "6000ms",
+    "cache_ttl": "60s",
+    "output_encoding": "no-op",
+    "port": {{.service.port}},
+    "host": {{marshal .service.default_hosts}},
+    "concurrent_calls": {{.service.concurrent_calls}},
+    "extra_config": {
+        "router": {
+            "auto_options": true
+        },
+        {{include "cors_headers.tmpl"}},
+        {{include "logging.tmpl"}}, 
+       "auth/api-keys": {
+            "strategy": "header",
+            "identifier": "Authorization",
+            "keys": [
+                {
+                    "@description": "ACME Inc.",
+                    "key": "4d2c61e1-34c4-e96c-9456-15bd983c5019",
+                    "roles": []
+                }
+            ]
+        }
+    },
+    "endpoints": [
+        {{template "endpoints.tmpl" .}}
+    ]
+}
