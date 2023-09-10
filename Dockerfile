@@ -1,31 +1,22 @@
-ARG GOLANG_VERSION
-ARG ALPINE_VERSION
-FROM golang:${GOLANG_VERSION}-alpine${ALPINE_VERSION} as builder
+ARG BASE_IMAGE
 
-RUN apk --no-cache --virtual .build-deps add make gcc musl-dev binutils-gold
+# Use the base image
+FROM ${BASE_IMAGE}
 
-COPY . /app
+# Set the working directory
 WORKDIR /app
 
-RUN make build
+# Copy your KrakenD configuration files (assuming they are in the same directory as this Dockerfile)
+COPY ./krakend /etc/krakend
 
+# Expose the port that KrakenD will listen on (if it's not already exposed in the base image)
+EXPOSE 8083
 
-FROM alpine:${ALPINE_VERSION}
+# Set environment variables
+ENV FC_ENABLE=1
+ENV FC_SETTINGS=/etc/krakend/settings/
+ENV FC_TEMPLATES=/etc/krakend/templates/
+ENV FC_PARTIALS=/etc/krakend/partials/
 
-LABEL maintainer="community@krakend.io"
-
-RUN apk add --no-cache ca-certificates tzdata && \
-    adduser -u 1000 -S -D -H krakend && \
-    mkdir /etc/krakend && \
-    echo '{ "version": 3 }' > /etc/krakend/krakend.json
-
-COPY --from=builder /app/krakend /usr/bin/krakend
-
-USER 1000
-
-WORKDIR /etc/krakend
-
-ENTRYPOINT [ "/usr/bin/krakend" ]
-CMD [ "run", "-c", "/etc/krakend/krakend.json" ]
-
-EXPOSE 8000 8090
+# Specify the command to run KrakenD
+CMD ["run", "-dc", "krakend.tmpl"]
