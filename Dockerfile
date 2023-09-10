@@ -3,9 +3,6 @@ ARG BASE_IMAGE
 # Use the base image
 FROM ${BASE_IMAGE}
 
-# Set the working directory
-WORKDIR /app
-
 # Copy your KrakenD configuration files (assuming they are in the same directory as this Dockerfile)
 COPY ./krakend /etc/krakend
 
