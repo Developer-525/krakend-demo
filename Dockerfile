@@ -1,6 +1,13 @@
-ARG GOLANG_VERSION
-ARG ALPINE_VERSION
-FROM golang:${GOLANG_VERSION}-alpine${ALPINE_VERSION} as builder
+#ARG GOLANG_VERSION
+#ARG ALPINE_VERSION
+
+#FROM golang:${GOLANG_VERSION}-alpine${ALPINE_VERSION} as builder
+
+export GOLANG_VERSION=1.20.6
+export ALPINE_VERSION=3.18
+
+docker build --build-arg GOLANG_VERSION=$GOLANG_VERSION --build-arg ALPINE_VERSION=$ALPINE_VERSION -t krakend-repo:1.0.0 .
+
 
 RUN apk --no-cache --virtual .build-deps add make gcc musl-dev binutils-gold
 
