@@ -23,7 +23,7 @@ RUN apk add --no-cache ca-certificates tzdata && \
 COPY --from=builder /app/krakend /etc/krakend
 
 WORKDIR /etc/krakend
-
-CMD [ "run", "-c", "/etc/krakend/krakend.tmpl" ]
+ENTRYPOINT ["/etc/krakend" ]
+CMD [ "run", "-dc", "krakend.tmpl" ]
 
 EXPOSE 8000 8090
