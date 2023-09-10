@@ -1,0 +1,20 @@
+# Use the base image
+FROM ${GOLANG_VERSION}
+
+# Set the working directory
+WORKDIR /app
+
+# Copy your KrakenD configuration files (assuming they are in the same directory as this Dockerfile)
+COPY ./krakend /etc/krakend
+
+# Expose the port that KrakenD will listen on (if it's not already exposed in the base image)
+EXPOSE 8083
+
+# Set environment variables
+ENV FC_ENABLE=1
+ENV FC_SETTINGS=/etc/krakend/settings/
+ENV FC_TEMPLATES=/etc/krakend/templates/
+ENV FC_PARTIALS=/etc/krakend/partials/
+
+# Specify the command to run KrakenD
+CMD ["run", "-dc", "krakend.tmpl"]
