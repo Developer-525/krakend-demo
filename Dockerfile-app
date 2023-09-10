@@ -1,5 +1,7 @@
+ARG BASE_IMAGE
+
 # Use the base image
-FROM ${GOLANG_VERSION}
+FROM ${BASE_IMAGE}
 
 # Set the working directory
 WORKDIR /app
