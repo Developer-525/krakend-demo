@@ -1,0 +1,54 @@
+{
+  "$schema": "https://www.krakend.io/schemas/krakend-3.1.schema.json",
+  "version": 3,
+  "name": "My API Gateway",
+  "timeout": "6000ms",
+  "cache_ttl": "60s",
+  "output_encoding": "no-op",
+  "port": 8081,
+  "endpoints": [
+    {
+      "endpoint": "/original-response",
+      "method": "GET",
+      "extra_config": {
+        "qos/ratelimit/router": {
+          "max_rate": 2,
+          "client_max_rate": 1,
+          "strategy": "ip"
+        }
+      },
+      "backend": [
+        {
+          "url_pattern": "/posts/1",
+          "sd": "static",
+          "method": "GET",
+          "is_collection": false,
+          "target": "https://jsonplaceholder.typicode.com/posts",
+          "host": ["jsonplaceholder.typicode.com"]
+        }
+      ]
+    },
+    {
+      "endpoint": "/grouping-response",
+      "method": "GET",
+      "extra_config": {
+        "qos/ratelimit/router": {
+          "max_rate": 2,
+          "client_max_rate": 1,
+          "strategy": "ip"
+        }
+      },
+      "backend": [
+        {
+          "url_pattern": "/posts/1",
+          "sd": "static",
+          "method": "GET",
+          "is_collection": false,
+          "target": "https://jsonplaceholder.typicode.com/posts",
+          "host": ["jsonplaceholder.typicode.com"],
+          "group": "Group-with-data"
+        }
+      ]
+    }
+  ]
+}
