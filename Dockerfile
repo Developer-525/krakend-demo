@@ -22,6 +22,8 @@ RUN apk add --no-cache ca-certificates tzdata && \
 
 COPY --from=builder /app/krakend /usr/bin/krakend
 
+RUN chmod +x /usr/bin/krakend
+
 WORKDIR /etc/krakend
 
 ENTRYPOINT [ "/usr/bin/krakend" ]
