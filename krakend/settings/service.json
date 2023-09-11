@@ -1,5 +1,0 @@
-{
-    "port": 8083,
-    "concurrent_calls": 1,
-    "default_hosts": ["http://172.22.67.60:8081"]
-}
